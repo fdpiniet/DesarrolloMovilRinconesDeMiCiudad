@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="xyz.fabianpineda.desarrollomovil.rinconesdemiciudad.ExplorarRinconesActivity">
+
+    <item
+        android:id="@+id/opcion_explorar_rincones"
+        android:orderInCategory="100"
+        android:title="@string/opcion_explorar_rincones_texto"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/opcion_explorar_mis_rincones"
+        android:orderInCategory="100"
+        android:title="@string/opcion_explorar_mis_rincones_texto"
+        app:showAsAction="never" />
+</menu>

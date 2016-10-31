@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rincones de mi Ciudad</string>
+
+    <string name="permiso_camara">Cámara</string>
+    <string name="permiso_almacenamiento_externo">Almacenamiento Externo</string>
+    <string name="permiso_indefinido">Indefinido</string>
+
+    <string name="permiso_concedido_formato">Permiso concedido: %s.</string>
+    <string name="permiso_denegado_formato">Permiso denegado: %s.</string>
+    <string name="permiso_denegado_permanentemente_formato">Denegado permanentemente: %s.</string>
+
+    <string name="camara_operacion_cancelada">Operación cancelada.</string>
+    <string name="camara_foto_descartada">Foto descartada.</string>
+
+    <string name="error_camara_ninguna">Cámara no encontrada.</string>
+    <string name="error_camara_no_app">Aplicación "Cámara" no encontrada.</string>
+
+    <string name="opcion_explorar_rincones_texto">Explorar Rincones</string>
+    <string name="opcion_explorar_mis_rincones_texto">Mis Rincones</string>
+
+    <string name="dialogo_solicitud_permiso_titulo">Permisos</string>
+    <string name="dialogo_solicitud_permiso_mensaje_formato">La aplicación necesita permisos para %s.</string>
+
+    <string name="boton_permiso_conceder">Conceder</string>
+    <string name="boton_permiso_denegar">Denegar</string>
+</resources>
