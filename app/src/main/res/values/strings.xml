@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">Rincones de mi Ciudad</string>
 
+    <string name="publicar_titulo">Publicar</string>
+    <string name="publicar_cargando">Cargando</string>
+    <string name="publicar_error_formato">Error %s</string>
+    <string name="publicar_error_foto">Foto no disponible</string>
+
     <string name="permiso_camara">Cámara</string>
     <string name="permiso_almacenamiento_externo">Almacenamiento Externo</string>
     <string name="permiso_indefinido">Indefinido</string>

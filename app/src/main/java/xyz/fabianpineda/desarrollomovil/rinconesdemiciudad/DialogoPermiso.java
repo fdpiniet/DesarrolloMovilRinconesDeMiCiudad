@@ -10,35 +10,35 @@ public class DialogoPermiso {
     private Context contexto;
     private AlertDialog.Builder builder;
 
-    public static String stringPermisoDenegadoPermanentemente(Context contexto, String permiso) {
+    static String stringPermisoDenegadoPermanentemente(Context contexto, String permiso) {
         return String.format(
                 contexto.getString(R.string.permiso_denegado_permanentemente_formato),
                 stringNombrePermiso(contexto, permiso)
         );
     }
 
-    public static String stringPermisoDenegado(Context contexto, String permiso) {
+    static String stringPermisoDenegado(Context contexto, String permiso) {
         return String.format(
                 contexto.getString(R.string.permiso_denegado_formato),
                 stringNombrePermiso(contexto, permiso)
         );
     }
 
-    public static String stringPermisoConcedido(Context contexto, String permiso) {
+    static String stringPermisoConcedido(Context contexto, String permiso) {
         return String.format(
                 contexto.getString(R.string.permiso_concedido_formato),
                 stringNombrePermiso(contexto, permiso)
         );
     }
 
-    public static String stringSolicitudPermiso(Context contexto, String permiso) {
+    static String stringSolicitudPermiso(Context contexto, String permiso) {
         return String.format(
             contexto.getString(R.string.dialogo_solicitud_permiso_mensaje_formato),
             stringNombrePermiso(contexto, permiso)
         );
     }
 
-    public static String stringNombrePermiso(Context contexto, String permiso) {
+    static String stringNombrePermiso(Context contexto, String permiso) {
         switch (permiso) {
             case "CAMERA":
                 return  contexto.getString(R.string.permiso_camara);
@@ -49,11 +49,11 @@ public class DialogoPermiso {
         }
     }
 
-    public void mostrar() {
+    void mostrar() {
         builder.show();
     }
 
-    public DialogoPermiso(final Context contexto, final PermissionRequest solicitud, final String permiso) {
+    DialogoPermiso(final Context contexto, final PermissionRequest solicitud, final String permiso) {
         this.contexto = contexto;
         builder = new AlertDialog.Builder(contexto);
 
@@ -63,8 +63,8 @@ public class DialogoPermiso {
         builder.setPositiveButton(R.string.boton_permiso_conceder, new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ExplorarRinconesActivity.notificar(contexto, stringPermisoConcedido(contexto, permiso));
-                solicitud.proceed();
+            AplicacionBaseActivity.notificar(contexto, stringPermisoConcedido(contexto, permiso));
+            solicitud.proceed();
             }
         });
 
