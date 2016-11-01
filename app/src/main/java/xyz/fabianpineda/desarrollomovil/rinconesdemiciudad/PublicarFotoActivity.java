@@ -8,11 +8,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class PublicarFotoActivity extends AplicacionBaseActivity {
     private TextView publicarMensaje;
     private ImageView publicarPreview;
+    private LinearLayout publicarDescripcionContenedor;
     private EditText publicarDescripcion;
     private FloatingActionButton publicarFAB;
 
@@ -21,7 +23,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
     static String stringErrorFoto (Context contexto, String error) {
         return String.format(
             contexto.getString(R.string.publicar_error_formato),
-            "\n" +
+            "\n\n\n" +
             error
         );
     }
@@ -35,7 +37,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
 
     private void handlerPublicarPresionado() {
         // TODO
-        ExplorarRinconesActivity.notificar(this, "Botón publicar presionado.");
+        notificar("Botón publicar presionado.");
     }
 
     private void errorFoto() {
@@ -52,10 +54,14 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         publicarMensaje.setVisibility(View.GONE);
 
         publicarPreview.setVisibility(View.VISIBLE);
-        publicarFAB.setVisibility(View.VISIBLE);
 
-        publicarDescripcion.setVisibility(View.VISIBLE);
+        publicarFAB.setVisibility(View.VISIBLE);
+        publicarFAB.setEnabled(true);
+
+        publicarDescripcionContenedor.setVisibility(View.VISIBLE);
         publicarDescripcion.setEnabled(true);
+
+        publicarPreview.setImageBitmap(foto);
     }
 
     @Override
@@ -65,12 +71,12 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         publicarMensaje = (TextView) findViewById(R.id.publicar_mensaje);
         publicarPreview = (ImageView) findViewById(R.id.publicar_preview);
 
+        publicarDescripcionContenedor = (LinearLayout) findViewById(R.id.publicar_descripcion_contenedor);
         publicarDescripcion = (EditText) findViewById(R.id.publicar_descripcion);
         publicarDescripcion.setEnabled(false);
 
         publicarFAB = (FloatingActionButton) findViewById(R.id.publicar_fab);
         publicarFAB.setEnabled(false);
-        publicarFAB.setVisibility(View.GONE);
         publicarFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
