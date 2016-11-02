@@ -9,14 +9,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.UUID;
 
 public abstract class AplicacionBaseActivity extends AppCompatActivity {
     private static final String ARCHIVO_PREFERENCIA_APLICACION = ExplorarRinconesActivity.class.getSimpleName();
     private static final String PREFERENCIA_GUID_APLICACION = "GUID_APLICACION";
 
-    private String GUIDAplicacion;
-    private SharedPreferences configuracion;
+    private static final String DIRECTORIO_FOTOS_USUARIO = "fotos_usuario";
+
+    String GUIDAplicacion;
+    SharedPreferences configuracion;
+
+    File directorioArchivosAplicacion;
+    File directorioFotosUsuario;
 
     static void notificar(Context contexto, String mensaje) {
         Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
@@ -33,6 +39,8 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     void notificar(int recursoStringMensaje) {
         AplicacionBaseActivity.notificar(this, recursoStringMensaje);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -63,6 +71,11 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
 
     abstract void inicializarUI();
 
+    private final void configurarRutas() {
+        directorioArchivosAplicacion = getFilesDir();
+        directorioFotosUsuario = getDir(DIRECTORIO_FOTOS_USUARIO, MODE_PRIVATE);
+    };
+
     void cargarConfiguracion() {
         configuracion = getSharedPreferences(ARCHIVO_PREFERENCIA_APLICACION, MODE_PRIVATE);
 
@@ -78,6 +91,7 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         cargarConfiguracion();
+        configurarRutas();
         inicializarUI();
         inicializarMenu();
     }

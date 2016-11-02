@@ -36,7 +36,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
     }
 
     private void handlerPublicarPresionado() {
-        // TODO
+        // TODO: guardar imágen en DISCX, hacer entrada en DB
         notificar("Botón publicar presionado.");
     }
 

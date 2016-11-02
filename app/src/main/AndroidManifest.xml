@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="xyz.fabianpineda.desarrollomovil.rinconesdemiciudad">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature
-        android:name="android.hardware.camera.any"
-        android:required="false" />
+    <!--
+    **  https://developer.android.com/guide/topics/manifest/uses-feature-element.html#camera-hw-features
+    **
+    **  Algunos dispositivos solo disponen de una cámara frontal o de una cámara trasera.
+    **  Para no usar únicamente la cámara trasera en dispositivos que solo tienen cámaras
+    **  frontales, uso "any" para usar cualquier cámara del dispositivo.
+    -->
+    <uses-feature android:name="android.hardware.camera.any" android:required="false" />
+
 
     <application
         android:allowBackup="true"
