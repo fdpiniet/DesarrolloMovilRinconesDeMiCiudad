@@ -1,7 +1,10 @@
 package xyz.fabianpineda.desarrollomovil.rinconesdemiciudad;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.UUID;
+
 public class PublicarFotoActivity extends AplicacionBaseActivity {
     private TextView publicarMensaje;
     private ImageView publicarPreview;
@@ -18,6 +25,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
     private EditText publicarDescripcion;
     private FloatingActionButton publicarFAB;
 
+    private File archivoFoto;
     private Bitmap foto;
 
     static String stringErrorFoto (Context contexto, String error) {
@@ -35,9 +43,61 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         contexto.startActivity(intentPublicar);
     }
 
+    private long crearRegistroFoto() {
+        // TODO: probar.
+        FotosUsuarioSQLite fotosUsuario = null;
+        SQLiteDatabase db = null;
+
+        long resultado = -1L;
+
+        try {
+            fotosUsuario = new FotosUsuarioSQLite(this);
+            db = fotosUsuario.getWritableDatabase();
+        } catch (SQLiteException e) {}
+
+        if (fotosUsuario == null || db == null || !db.isOpen() || db.isReadOnly()) {
+            return resultado;
+        }
+
+        db.beginTransaction();
+        try {
+            resultado = FotosUsuarioSQLite.insertar(db, GUIDAplicacion, /*TODO ruta*/ null, publicarDescripcion.getText().toString());
+            db.setTransactionSuccessful();
+        } catch (SQLiteException e) {} finally {
+            db.endTransaction();
+        }
+
+        db.close();
+
+        return resultado;
+    }
+
+    private boolean guardarArchivoFoto() {
+        // TODO: implementar.
+
+        /*archivoFoto = new File(directorioFotosUsuario, UUID.randomUUID().toString() + ".jpg");
+
+        FileOutputStream salida;
+        try {
+            salida = openFileOutput(archivoFoto.toString, Context.MODE_PRIVATE);
+            salida.write(string.getBytes());
+            salida.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+
+        return true;
+    }
+
     private void handlerPublicarPresionado() {
-        // TODO: guardar imágen en DISCX, hacer entrada en DB
-        notificar("Botón publicar presionado.");
+        if (!guardarArchivoFoto()) {
+            abortarActivity(R.string.error_sqlite);
+        } else if (crearRegistroFoto() < 0) {
+            abortarActivity(R.string.error_sqlite);
+        } else {
+            // TODO
+            notificar("TO-DO: guardarArchivoFoto(), crearRegistroFoto(), handlerPublicarPresionado()");
+        }
     }
 
     private void errorFoto() {

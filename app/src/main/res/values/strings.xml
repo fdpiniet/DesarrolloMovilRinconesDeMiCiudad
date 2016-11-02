@@ -22,6 +22,8 @@
     <string name="error_camara_ninguna">Cámara no encontrada.</string>
     <string name="error_camara_no_app">Aplicación "Cámara" no encontrada.</string>
 
+    <string name="error_sqlite">Error abriendo base de datos.</string>
+
     <string name="opcion_explorar_rincones_texto">Explorar Rincones</string>
     <string name="opcion_explorar_mis_rincones_texto">Mis Rincones</string>
 

@@ -1,5 +1,6 @@
 package xyz.fabianpineda.desarrollomovil.rinconesdemiciudad;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -34,6 +35,16 @@ public class FotosUsuarioSQLite extends SQLiteOpenHelper {
         "DROP TABLE IF EXISTS %s;",
         TABLA_FOTOS_USUARIO
     );
+
+    static long insertar(SQLiteDatabase db, String id_usuario, String ruta, String descripcion) {
+        ContentValues registro = new ContentValues();
+
+        registro.put(TABLA_FOTOS_USUARIO_ID, id_usuario);
+        registro.put(TABLA_FOTOS_USUARIO_RUTA, ruta);
+        registro.put(TABLA_FOTOS_USUARIO_DESCRIPCION, descripcion);
+
+        return db.insert(TABLA_FOTOS_USUARIO, null, registro);
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

@@ -24,6 +24,23 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     File directorioArchivosAplicacion;
     File directorioFotosUsuario;
 
+    void abortarActivity(String mensaje) {
+        if (mensaje != null) {
+            notificar(R.string.error_sqlite);
+        }
+
+        finish();
+    }
+
+    // Si es <= 0 el mensaje es ignorado
+    void abortarActivity(int recursoMensaje) {
+        if (recursoMensaje > 0) {
+            abortarActivity(getString(recursoMensaje));
+        } else {
+            abortarActivity(null);
+        }
+    }
+
     static void notificar(Context contexto, String mensaje) {
         Toast.makeText(contexto, mensaje, Toast.LENGTH_SHORT).show();
     }
@@ -39,8 +56,6 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     void notificar(int recursoStringMensaje) {
         AplicacionBaseActivity.notificar(this, recursoStringMensaje);
     }
-
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
