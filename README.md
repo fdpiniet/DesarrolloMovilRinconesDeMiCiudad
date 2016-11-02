@@ -53,6 +53,8 @@ La fecha y hora de estos cambios es visible en los commits (pereza.) Ordedos por
 * ExplorarRinconesActivity es capáz de recibir imágenes de fotos tomadas por la aplicación cámara. Informa al usuario si la captura de foto fue cancelada.
 * La aplicación crea un UUID que identifica la instalación de la aplicación (no al usuario) al iniciar la aplicación y persiste a travéz de sesiones/ejecuciones/lanzamientos de aplicación.
 * Si por cualquier razón mencionada anteriormente la aplicación no es capáz de tomar fotos, entonces el FloatingActionButton de la cámara para tomar fotos no aparecerá.
+* Separada la funcionalidad común entre todas las Activity en una clase base: AplicacionBaseActivity. Las Activity existentes heredan de ella.
+* UI de PublicarFotoActivity terminada. La Activity recibe y muestra una foto enviada desde otras Activity y propiamente maneja condiciones de error mostrando mensajes al usuario.
 
 #### Por hacer
 
@@ -62,6 +64,9 @@ Listando solo tareas a corto plazo. Es una lista "*TO-DO*".
 * Crear la interfáz de usuario de envío de fotos. Es un formulario. Se puede compartir código para "Explorar Rincones" y "Mis Rincones" ya que la aplicación usa fragments.
 * Implementar código HTTP (y JSON en caso que el servidor de respuestas JSON).
 * Crear la interfáz de usuario de muestra de listados de fotos, sean fotos públicas de otras personas o las fotos del usuario.
+* Documentar!
+* Enviar trabajo; compartir enlace a repositorio.
+* Reemplazar screenshots de pantalla de captura de fotos (y confirmación) por algo mas pertinente al propósito de la aplicación.
 
 #### Screenshots de Progreso
 

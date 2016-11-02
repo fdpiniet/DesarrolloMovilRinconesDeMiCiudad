@@ -24,12 +24,14 @@
     <include layout="@layout/content_explorar_rincones" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/camara_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:srcCompat="@android:drawable/ic_menu_camera" />
+        tools:visibility="visible"
+        app:srcCompat="@android:drawable/ic_menu_camera"
+        app:backgroundTint="?attr/colorPrimaryDark" />
 
 </android.support.design.widget.CoordinatorLayout>
