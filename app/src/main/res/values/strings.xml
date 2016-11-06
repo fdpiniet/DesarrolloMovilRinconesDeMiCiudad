@@ -4,9 +4,9 @@
 
     <string name="publicar_titulo">Nuevo Rincón</string>
     <string name="publicar_cargando">Cargando</string>
-    <string name="publicar_error_formato">Error %s</string>
-    <string name="publicar_error_foto">Foto no disponible</string>
     <string name="publicar_descripcion_hint">Descripción de foto.</string>
+    <string name="publicar_exito">Rincón publicado.</string>
+    <string name="publicar_cancelado">Operación cancelada.</string>
 
     <string name="permiso_camara">Cámara</string>
     <string name="permiso_almacenamiento_externo">Almacenamiento Externo</string>
@@ -21,8 +21,10 @@
 
     <string name="error_camara_ninguna">Cámara no encontrada.</string>
     <string name="error_camara_no_app">Aplicación "Cámara" no encontrada.</string>
-
+    <string name="error_foto">Foto no disponible</string>
+    <string name="error_escritura">Error guardando foto.</string>
     <string name="error_sqlite">Error abriendo base de datos.</string>
+    <string name="error_publicando">Error publicando foto.</string>
 
     <string name="opcion_explorar_rincones_texto">Explorar Rincones</string>
     <string name="opcion_explorar_mis_rincones_texto">Mis Rincones</string>

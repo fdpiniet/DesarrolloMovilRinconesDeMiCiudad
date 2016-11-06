@@ -25,9 +25,23 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
 
     private static final Random PRNG = new Random();
     private int codigoResultadoIntentCamara;
+    private int codigoResultadoIntentPublicar;
 
     private FloatingActionButton camaraFAB;
     private boolean camaraActivada;
+
+    private void resultadoPublicar(boolean ok, Intent datos) {
+        Bundle extras = null;
+        String archivo;
+
+        if (datos == null || (extras = datos.getExtras()) == null) {
+            notificar(R.string.error_publicando);
+            return;
+        } else if (!ok || (archivo = extras.getString(PublicarFotoActivity.PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO, null)) == null || archivo.trim() == "") {
+            notificar(extras.getString(PublicarFotoActivity.PROPIEDAD_BUNDLE_RESULTADO_MENSAJE, getString(R.string.publicar_cancelado)));
+            return;
+        }
+    }
 
     private void resultadoCamara(boolean ok, Intent datos) {
         if (!ok) {
@@ -35,7 +49,8 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
             return;
         }
 
-        PublicarFotoActivity.lanzarActivity(this, datos.getExtras());
+        codigoResultadoIntentPublicar = PRNG.nextInt(CODIGO_RESULTADO_LIMITE_SUPERIOR);
+        PublicarFotoActivity.lanzarActivity(this, datos.getExtras(), codigoResultadoIntentPublicar);
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
@@ -102,9 +117,12 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-         if (requestCode == codigoResultadoIntentCamara) {
+        if (requestCode == codigoResultadoIntentCamara) {
             codigoResultadoIntentCamara = CODIGO_RESULTADO_INTENT_PROCESADO;
             resultadoCamara(resultCode == RESULT_OK, data);
+        } else if (requestCode == codigoResultadoIntentPublicar) {
+            codigoResultadoIntentPublicar = CODIGO_RESULTADO_INTENT_PROCESADO;
+            resultadoPublicar(resultCode == RESULT_OK, data);
         }
     }
 
@@ -141,5 +159,6 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
         super.onCreate(savedInstanceState);
 
         codigoResultadoIntentCamara = CODIGO_RESULTADO_INTENT_PROCESADO;
+        codigoResultadoIntentPublicar = CODIGO_RESULTADO_INTENT_PROCESADO;
     }
 }

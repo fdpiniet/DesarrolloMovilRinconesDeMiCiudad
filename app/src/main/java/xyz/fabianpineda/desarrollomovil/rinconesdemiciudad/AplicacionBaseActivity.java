@@ -10,35 +10,36 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.UUID;
 
 public abstract class AplicacionBaseActivity extends AppCompatActivity {
     private static final String ARCHIVO_PREFERENCIA_APLICACION = ExplorarRinconesActivity.class.getSimpleName();
     private static final String PREFERENCIA_GUID_APLICACION = "GUID_APLICACION";
 
-    private static final String DIRECTORIO_FOTOS_USUARIO = "fotos_usuario";
+    static final boolean FECHAS_SON_UTC = true;
+    static final String FORMATO_FECHA_LOCAL = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"; // ISO 8601
+    static final String FORMATO_FECHA_UTC = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // ISO 8601
 
     String GUIDAplicacion;
     SharedPreferences configuracion;
 
     File directorioArchivosAplicacion;
-    File directorioFotosUsuario;
 
-    void abortarActivity(String mensaje) {
-        if (mensaje != null) {
-            notificar(R.string.error_sqlite);
-        }
+    static String fecha() {
+        DateFormat formato;
 
-        finish();
-    }
-
-    // Si es <= 0 el mensaje es ignorado
-    void abortarActivity(int recursoMensaje) {
-        if (recursoMensaje > 0) {
-            abortarActivity(getString(recursoMensaje));
+        if (FECHAS_SON_UTC) {
+            formato = new SimpleDateFormat(FORMATO_FECHA_UTC);
+            formato.setTimeZone(TimeZone.getTimeZone("UTC"));
         } else {
-            abortarActivity(null);
+            formato = new SimpleDateFormat(FORMATO_FECHA_LOCAL);
         }
+
+        return formato.format(new Date());
     }
 
     static void notificar(Context contexto, String mensaje) {
@@ -56,6 +57,23 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     void notificar(int recursoStringMensaje) {
         AplicacionBaseActivity.notificar(this, recursoStringMensaje);
     }
+
+    /*void abortarActivity(String mensaje) {
+        if (mensaje != null) {
+            notificar(R.string.error_sqlite);
+        }
+
+        finish();
+    }
+
+    // Si es <= 0 el mensaje es ignorado
+    void abortarActivity(int recursoMensaje) {
+        if (recursoMensaje > 0) {
+            abortarActivity(getString(recursoMensaje));
+        } else {
+            abortarActivity(null);
+        }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -88,7 +106,6 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
 
     private final void configurarRutas() {
         directorioArchivosAplicacion = getFilesDir();
-        directorioFotosUsuario = getDir(DIRECTORIO_FOTOS_USUARIO, MODE_PRIVATE);
     };
 
     void cargarConfiguracion() {
