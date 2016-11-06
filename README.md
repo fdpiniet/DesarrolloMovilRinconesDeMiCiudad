@@ -55,13 +55,17 @@ La fecha y hora de estos cambios es visible en los commits (pereza.) Ordedos por
 * Si por cualquier razón mencionada anteriormente la aplicación no es capáz de tomar fotos, entonces el FloatingActionButton de la cámara para tomar fotos no aparecerá.
 * Separada la funcionalidad común entre todas las Activity en una clase base: AplicacionBaseActivity. Las Activity existentes heredan de ella.
 * UI de PublicarFotoActivity terminada. La Activity recibe y muestra una foto enviada desde otras Activity y propiamente maneja condiciones de error mostrando mensajes al usuario.
+* Realizada limpieza sobre interfáz de usuario innecesaria en PublicarFotoActivity.
+* PublicarFotoActivity es capáz de guardar las fotos tomadas en almacenamiento interno sin neceidad de pedir pemisos de escritura (es espacio de almacenamiento privado despuñes de todo.)
+* La aplicación mantiene un registro SQLite en donde guarda los datos de las fotos, incluyendo descripciones y otros.
+* La activity PublicarFotoActivity fue modificada de tal manera que ahora entrega un resultado directamente a ExplorarRinconesActivity de la misma manera en que la cámara de Android regresa resultados.
+* Las fotos son guardadas en formato JPEG con calidad igual a 50 para no desperdiciar tanto espacio en el servidor.
+* Funciona en Android 6 y superior.
 
 #### Por hacer
 
 Listando solo tareas a corto plazo. Es una lista "*TO-DO*".
 
-* Implementar un mecanismo para guardar fotos en disco; no debe ser dificil ya que los permisos de escritura están siendo manejados y los datos de la foto capturada están disponibles como un String binario.
-* Crear la interfáz de usuario de envío de fotos. Es un formulario. Se puede compartir código para "Explorar Rincones" y "Mis Rincones" ya que la aplicación usa fragments.
 * Implementar código HTTP (y JSON en caso que el servidor de respuestas JSON).
 * Crear la interfáz de usuario de muestra de listados de fotos, sean fotos públicas de otras personas o las fotos del usuario.
 * Documentar!
@@ -82,7 +86,13 @@ Listando solo tareas a corto plazo. Es una lista "*TO-DO*".
 
 ###### Confirmación de Captura de Foto
 
-![Captura de pantalla: Pantalla de Confirmaci'on de Captura de Foto'](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-10-30-confirmacion-foto.png)
+![Captura de pantalla: Pantalla de Confirmaci'on de Captura de Foto](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-10-30-confirmacion-foto.png)
+
+##### 2016-10-30
+
+###### Publicar Foto
+
+![Captura de pantalla: Pantalla de Publicar Foto](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-11-6-publicar-foto.png)
 
 ### Wireframes
 
