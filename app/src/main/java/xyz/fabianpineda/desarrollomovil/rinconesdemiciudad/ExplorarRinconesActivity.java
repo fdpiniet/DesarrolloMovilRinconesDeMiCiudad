@@ -3,12 +3,16 @@ package xyz.fabianpineda.desarrollomovil.rinconesdemiciudad;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 import permissions.dispatcher.NeedsPermission;
@@ -30,6 +34,8 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
     private FloatingActionButton camaraFAB;
     private boolean camaraActivada;
 
+    private String tempNombreFoto;
+
     private void resultadoPublicar(boolean ok, Intent datos) {
         Bundle extras = null;
         String archivo;
@@ -43,14 +49,20 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
         }
     }
 
-    private void resultadoCamara(boolean ok, Intent datos) {
+    private void resultadoCamara(boolean ok) {
         if (!ok) {
             notificar(R.string.camara_operacion_cancelada);
             return;
         }
 
+        Bundle datos = new Bundle();
+
         codigoResultadoIntentPublicar = PRNG.nextInt(CODIGO_RESULTADO_LIMITE_SUPERIOR);
-        PublicarFotoActivity.lanzarActivity(this, datos.getExtras(), codigoResultadoIntentPublicar);
+
+        datos.putString(PublicarFotoActivity.PROPIEDAD_BUNDLE_CAMARA_NOMBRE_ARCHIVO, new String(tempNombreFoto));
+        tempNombreFoto = null;
+
+        PublicarFotoActivity.lanzarActivity(this, datos, codigoResultadoIntentPublicar);
     }
 
     @NeedsPermission(Manifest.permission.CAMERA)
@@ -66,7 +78,19 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
          */
         codigoResultadoIntentCamara = PRNG.nextInt(CODIGO_RESULTADO_LIMITE_SUPERIOR);
 
+        String nombreArchivo = nombreFoto();
+        File archivoFoto = new File(directorioArchivosAplicacionCompleto, nombreArchivo);
+        Uri rutaArchivoFoto = FileProvider.getUriForFile(this, "xyz.fabianpineda.desarrollomovil.rinconesdemiciudad.FileProvider", archivoFoto);
+
+        if (rutaArchivoFoto == null) {
+            notificar(R.string.error_escritura);
+
+            camaraFAB.setEnabled(false);
+            camaraFAB.setVisibility(View.GONE);
+        }
+
         Intent intentAppCamara = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
         if (intentAppCamara.resolveActivity(getPackageManager()) == null) {
             notificar(R.string.error_camara_no_app);
 
@@ -76,6 +100,8 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
             return;
         }
 
+        tempNombreFoto = nombreArchivo;
+        intentAppCamara.putExtra(MediaStore.EXTRA_OUTPUT, rutaArchivoFoto);
         startActivityForResult(intentAppCamara, codigoResultadoIntentCamara);
     }
 
@@ -119,7 +145,7 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == codigoResultadoIntentCamara) {
             codigoResultadoIntentCamara = CODIGO_RESULTADO_INTENT_PROCESADO;
-            resultadoCamara(resultCode == RESULT_OK, data);
+            resultadoCamara(resultCode == RESULT_OK);
         } else if (requestCode == codigoResultadoIntentPublicar) {
             codigoResultadoIntentPublicar = CODIGO_RESULTADO_INTENT_PROCESADO;
             resultadoPublicar(resultCode == RESULT_OK, data);

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -12,21 +13,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.File;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 public class PublicarFotoActivity extends AplicacionBaseActivity {
-    static final String FORMATO_NOMBRE_ARCHIVO_FOTO = "%s.%s";
+    static final String PROPIEDAD_BUNDLE_CAMARA_NOMBRE_ARCHIVO = "nombre";
 
-    static final String FOTOS_FORMATO = "JPEG";
-    static final int FOTOS_CALIDAD = 50; // Para no gastar tanto espacio en servidor :D
-
-    static final String PROPIEDAD_BUNDLE_CAMARA_FOTO = "data";
-
-    static final String PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO = "data"; // por consistencia
+    static final String PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO = "archivo";
     static final String PROPIEDAD_BUNDLE_RESULTADO_MENSAJE = "mensaje";
 
     private TextView publicarCargando;
@@ -34,7 +29,8 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
     private EditText publicarDescripcion;
     private FloatingActionButton publicarFAB;
 
-    private Bitmap foto;
+    private String nombreFoto;
+    private Bitmap imagen;
 
     private Intent datosResultado;
     private int codigoResultado;
@@ -46,26 +42,18 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         contexto.startActivityForResult(intentPublicar, codigoResultadoActivity);
     }
 
-    static String nombreFoto() {
-        return String.format(
-            FORMATO_NOMBRE_ARCHIVO_FOTO,
-
-            fecha(),
-            FOTOS_FORMATO
-        );
-    }
-
     private void producirResultadoYTerminar(int mensaje) {
         producirResultado(mensaje);
         finish();
     }
 
     private void producirResultado(int mensaje) {
+        datosResultado.putExtra(PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO, nombreFoto);
         datosResultado.putExtra(PROPIEDAD_BUNDLE_RESULTADO_MENSAJE, getString(mensaje));
         setResult(codigoResultado, datosResultado);
     }
 
-    private long crearRegistroFoto(String nombreArchivo) {
+    private long crearRegistroFoto() {
         FotosUsuarioSQLite fotosUsuario = null;
         SQLiteDatabase db = null;
 
@@ -82,7 +70,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
 
         db.beginTransaction();
         try {
-            resultado = FotosUsuarioSQLite.insertar(db, GUIDAplicacion, nombreArchivo, publicarDescripcion.getText().toString());
+            resultado = FotosUsuarioSQLite.insertar(db, GUIDAplicacion, nombreFoto, publicarDescripcion.getText().toString());
             db.setTransactionSuccessful();
         } catch (SQLiteException e) {} finally {
             db.endTransaction();
@@ -93,36 +81,8 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         return resultado;
     }
 
-    private String guardarArchivoFoto() {
-        FileOutputStream salida = null;
-        String nombreArchivo = nombreFoto();
-
-        boolean resultadoCompresion = false;
-
-        try {
-            salida = openFileOutput(nombreArchivo, MODE_PRIVATE);
-            resultadoCompresion = foto.compress(Bitmap.CompressFormat.valueOf(FOTOS_FORMATO), FOTOS_CALIDAD, salida);
-        } catch (Exception e) {
-            try {
-                salida.close();
-            } catch (IOException x) {}
-        }
-
-        if (!resultadoCompresion) {
-            nombreArchivo = null;
-        } else {
-            datosResultado.putExtra(PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO, nombreArchivo);
-        }
-
-        return nombreArchivo;
-    }
-
     private void handlerPublicarPresionado() {
-        String nombreArchivo = guardarArchivoFoto();
-
-        if (nombreArchivo == null) {
-            producirResultadoYTerminar(R.string.error_escritura);
-        } else if (crearRegistroFoto(nombreArchivo) < 0) {
+        if (crearRegistroFoto() < 0) {
             producirResultadoYTerminar(R.string.error_sqlite);
         }
 
@@ -137,7 +97,7 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
     }
 
     private void activarUI() {
-        publicarPreview.setImageBitmap(foto);
+        publicarPreview.setImageBitmap(imagen);
         publicarCargando.setVisibility(GONE);
         publicarPreview.setVisibility(VISIBLE);
         publicarFAB.setVisibility(VISIBLE);
@@ -167,7 +127,6 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         super.onCreate(savedInstanceState);
 
         Bundle informacionFoto = getIntent().getExtras();
-        Object imagen;
 
         datosResultado = new Intent();
         datosResultado.putExtra(PROPIEDAD_BUNDLE_RESULTADO_ARCHIVO, "");
@@ -176,17 +135,14 @@ public class PublicarFotoActivity extends AplicacionBaseActivity {
         codigoResultado = RESULT_CANCELED;
         setResult(codigoResultado, datosResultado);
 
-        if (informacionFoto == null || (imagen = informacionFoto.get(PROPIEDAD_BUNDLE_CAMARA_FOTO)) == null) {
-            producirResultadoYTerminar(R.string.error_foto);
-        } else {
-            try {
-                foto = (Bitmap) imagen;
-            } catch (ClassCastException e) {}
-
-            if (foto == null) {
-                producirResultadoYTerminar(R.string.error_foto);
-            }
+        if (informacionFoto == null || (nombreFoto = informacionFoto.getString(PROPIEDAD_BUNDLE_CAMARA_NOMBRE_ARCHIVO, null)) == null) {
+            producirResultadoYTerminar(R.string.error_escritura);
         }
+
+        BitmapFactory.Options opcionesDecodificador = new BitmapFactory.Options();
+        opcionesDecodificador.inSampleSize = 4; // 1/4 tamaño original.
+
+        imagen = BitmapFactory.decodeFile((new File(directorioArchivosAplicacionCompleto, nombreFoto)).getPath(), opcionesDecodificador);
 
         activarUI();
     }

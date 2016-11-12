@@ -20,6 +20,9 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     private static final String ARCHIVO_PREFERENCIA_APLICACION = ExplorarRinconesActivity.class.getSimpleName();
     private static final String PREFERENCIA_GUID_APLICACION = "GUID_APLICACION";
 
+    static final String PLANTILLA_NOMBRE_ARCHIVO_FOTO = "%s.%s";
+    static final String NOMBRE_ARCHIVO_FOTO_FORMATO = "JPEG";
+
     static final boolean FECHAS_SON_UTC = true;
     static final String FORMATO_FECHA_LOCAL = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"; // ISO 8601
     static final String FORMATO_FECHA_UTC = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"; // ISO 8601
@@ -28,6 +31,7 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     SharedPreferences configuracion;
 
     File directorioArchivosAplicacion;
+    File directorioArchivosAplicacionCompleto;
 
     static String fecha() {
         DateFormat formato;
@@ -40,6 +44,14 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
         }
 
         return formato.format(new Date());
+    }
+
+    static String nombreFoto() {
+        return String.format(
+                PLANTILLA_NOMBRE_ARCHIVO_FOTO,
+                fecha(),
+                NOMBRE_ARCHIVO_FOTO_FORMATO
+        );
     }
 
     static void notificar(Context contexto, String mensaje) {
@@ -57,23 +69,6 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
     void notificar(int recursoStringMensaje) {
         AplicacionBaseActivity.notificar(this, recursoStringMensaje);
     }
-
-    /*void abortarActivity(String mensaje) {
-        if (mensaje != null) {
-            notificar(R.string.error_sqlite);
-        }
-
-        finish();
-    }
-
-    // Si es <= 0 el mensaje es ignorado
-    void abortarActivity(int recursoMensaje) {
-        if (recursoMensaje > 0) {
-            abortarActivity(getString(recursoMensaje));
-        } else {
-            abortarActivity(null);
-        }
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -106,6 +101,7 @@ public abstract class AplicacionBaseActivity extends AppCompatActivity {
 
     private final void configurarRutas() {
         directorioArchivosAplicacion = getFilesDir();
+        directorioArchivosAplicacionCompleto = getExternalFilesDir(null);
     };
 
     void cargarConfiguracion() {

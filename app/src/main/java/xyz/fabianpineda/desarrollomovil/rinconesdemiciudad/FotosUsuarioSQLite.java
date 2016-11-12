@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class FotosUsuarioSQLite extends SQLiteOpenHelper {
-    static final String DB_NOMBRE = "RinconesDeMiCiudad";
+    static final String DB_NOMBRE = "RinconesDeMiCiudad.db";
     static final int DB_VERSION = 1;
 
     static final String TABLA_FOTOS_USUARIO = "FotosUsuario";
