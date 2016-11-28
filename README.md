@@ -10,7 +10,7 @@ Descripción
 
 Permite a personas residentes de alguna ciudad subir fotos públicamente de distintos rincones o esquinas de la ciudad.
 
-Mantiene un registro separado de las fotos subidas por ser vistas o descargadas en el futuro, cuando el usuario lo desee.
+Mantiene un registro separado de las fotos subidas para ser vistas o descargadas en el futuro, cuando el usuario lo desee.
 
 ### Audiencia
 
@@ -61,36 +61,30 @@ La fecha y hora de estos cambios es visible en los commits (pereza.) Ordedos por
 * La activity PublicarFotoActivity fue modificada de tal manera que ahora entrega un resultado directamente a ExplorarRinconesActivity de la misma manera en que la cámara de Android regresa resultados.
 * Las fotos son guardadas en formato JPEG con calidad igual a 50 para no desperdiciar tanto espacio en el servidor.
 * Funciona en Android 6 y superior.
+* Muestra de fotos tomadas por usuario en un listado con sus respectivas fechas y descripciones.
 
 #### Por hacer
 
-Listando solo tareas a corto plazo. Es una lista "*TO-DO*".
-
 * Implementar código HTTP (y JSON en caso que el servidor de respuestas JSON).
-* Crear la interfáz de usuario de muestra de listados de fotos, sean fotos públicas de otras personas o las fotos del usuario.
+* Hacer UI mas "tolerable"
 * Documentar!
 * Enviar trabajo; compartir enlace a repositorio.
-* Reemplazar screenshots de pantalla de captura de fotos (y confirmación) por algo mas pertinente al propósito de la aplicación.
 
-#### Screenshots de Progreso
+#### Screenshots
 
-##### 2016-10-30
+##### Explorar Rincones
 
-###### Pantalla Principal
+![Captura de pantalla: Activity Explorar Rincones](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-11-28-explorar-rincones.png)
 
-![Captura de pantalla: Activity Explorar Rincones](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-10-30-explorar-rincones.png)
-
-###### Captura de Foto
+##### Captura de Foto
 
 ![Captura de pantalla: Pantalla de Captura de Foto](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-10-30-captura-de-foto.png)
 
-###### Confirmación de Captura de Foto
+##### Confirmación de Captura de Foto
 
 ![Captura de pantalla: Pantalla de Confirmaci'on de Captura de Foto](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-10-30-confirmacion-foto.png)
 
-##### 2016-10-30
-
-###### Publicar Foto
+##### Publicar Foto
 
 ![Captura de pantalla: Pantalla de Publicar Foto](https://dl.dropboxusercontent.com/u/92267203/Static/uni/Desarrollo%20M%C3%B3vil/RinconesDeMiCiudad/screenshots/2016-11-6-publicar-foto.png)
 
