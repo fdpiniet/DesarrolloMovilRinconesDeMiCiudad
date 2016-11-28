@@ -8,6 +8,8 @@
     <string name="publicar_exito">Rincón publicado.</string>
     <string name="publicar_cancelado">Operación cancelada.</string>
 
+    <string name="explorar_no_descripcion">Rincón sin descripción.</string>
+
     <string name="permiso_camara">Cámara</string>
     <string name="permiso_almacenamiento_externo">Almacenamiento Externo</string>
     <string name="permiso_indefinido">Indefinido</string>

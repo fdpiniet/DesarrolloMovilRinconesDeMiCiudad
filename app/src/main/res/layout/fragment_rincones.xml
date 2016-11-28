@@ -11,4 +11,8 @@
     tools:context="xyz.fabianpineda.desarrollomovil.rinconesdemiciudad.RinconesFragment"
     tools:showIn="@layout/activity_explorar_rincones">
 
+    <ListView
+        android:id="@+id/rinconesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>

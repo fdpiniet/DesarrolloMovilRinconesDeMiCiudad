@@ -3,6 +3,9 @@ package xyz.fabianpineda.desarrollomovil.rinconesdemiciudad;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,9 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.view.View;
+import android.widget.ListView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 import permissions.dispatcher.NeedsPermission;
@@ -31,8 +34,13 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
     private int codigoResultadoIntentCamara;
     private int codigoResultadoIntentPublicar;
 
+    private ListView lista;
+
     private FloatingActionButton camaraFAB;
     private boolean camaraActivada;
+
+    FotosUsuarioSQLite fotosUsuario;
+    SQLiteDatabase db;
 
     private String tempNombreFoto;
 
@@ -160,10 +168,46 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
 
         camaraFAB.setEnabled(camaraActivada);
         camaraFAB.setVisibility(camaraActivada ? View.VISIBLE : View.GONE);
+
+        refrescarRincones();
     }
 
     private void handlerTomarFotoPresionado() {
         ExplorarRinconesActivityPermissionsDispatcher.lanzarCamaraWithCheck(this);
+    }
+
+    void inicializarDB() {
+        fotosUsuario = null;
+        db = null;
+
+        SQLiteException x = null;
+
+        fotosUsuario = null;
+        db = null;
+
+        try {
+            fotosUsuario = new FotosUsuarioSQLite(this);
+            db = fotosUsuario.getReadableDatabase();
+        } catch (SQLiteException e) {
+            x = e;
+        }
+
+        if (fotosUsuario == null || db == null || !db.isOpen() || db.isReadOnly()) {
+            throw new SQLiteException(getString(R.string.error_sqlite), x);
+        }
+    }
+
+    private void refrescarRincones() {
+        Cursor rincones = db.rawQuery(
+            String.format(
+                "SELECT rowid _id, * FROM %s ORDER BY %s DESC LIMIT %d",
+                FotosUsuarioSQLite.TABLA_FOTOS_USUARIO,
+                FotosUsuarioSQLite.TABLA_FOTOS_USUARIO_FECHA_CREACION,
+                5),
+            null
+        );
+
+        lista.setAdapter(new AdaptadorRincones(this, rincones, directorioArchivosAplicacionCompleto));
     }
 
     @Override
@@ -178,6 +222,11 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
                 handlerTomarFotoPresionado();
             }
         });
+
+        lista = (ListView) findViewById(R.id.rinconesView);
+
+        inicializarDB();
+        refrescarRincones();
     }
 
     @Override
@@ -186,5 +235,14 @@ public class ExplorarRinconesActivity extends AplicacionBaseActivity {
 
         codigoResultadoIntentCamara = CODIGO_RESULTADO_INTENT_PROCESADO;
         codigoResultadoIntentPublicar = CODIGO_RESULTADO_INTENT_PROCESADO;
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (db != null && db.isOpen()) {
+            db.close();
+        }
+
+        super.onDestroy();
     }
 }
